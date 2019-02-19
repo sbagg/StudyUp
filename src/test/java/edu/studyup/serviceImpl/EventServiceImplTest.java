@@ -75,5 +75,115 @@ class EventServiceImplTest {
 			eventServiceImpl.updateEventName(eventID, "Renamed Event 3");
 		  });
 	}
-	
+	@Test
+	void testAddStudents_goodCase() throws StudyUpException {
+		//creates student
+		Student studentA = new Student();
+		studentA.setFirstName("Jane");
+		studentA.setLastName("Smith");
+		studentA.setEmail("janeSmith@email.com");
+		studentA.setId(2);
+		int id1 = 1;
+		
+		//adds student to the event
+		eventServiceImpl.addStudentToEvent(studentA, id1);
+		
+		//gets the student from the data storage and assign it to student list
+		List<Student> temp = DataStorage.eventData.get(id1).getStudents();
+		//throws an assert if student A is equal to temporary database event number assigned to it
+		assertEquals(studentA, temp.get(id1));
+		
+	}
+	@Test
+	void testTooManyStudents_badCase() throws StudyUpException {
+		//creates student
+		Student studentA = new Student();
+		studentA.setFirstName("Jane");
+		studentA.setLastName("Smith");
+		studentA.setEmail("janeSmith@email.com");
+		studentA.setId(2);
+		int id1 = 1;
+		//creates student 2
+		Student studentB = new Student();
+		studentB.setFirstName("John");
+		studentB.setLastName("Smith");
+		studentB.setEmail("johnSmith@email.com");
+		studentB.setId(3);
+		
+		//adds student to the event
+		eventServiceImpl.addStudentToEvent(studentA, id1);
+		
+		//throws an assert if third student added
+		Assertions.assertThrows(StudyUpException.class, () -> {
+			eventServiceImpl.addStudentToEvent(studentB, id1);
+		  });
+		
+	}
+	@Test
+	void activeEvents_goodCase() throws StudyUpException {
+		
+		//gets the event from active events and assigns it to a temp list
+		List<Event> temp = eventServiceImpl.getActiveEvents();
+		//throws an assert if event Id is equal to eventId previously declared
+		assertEquals(1, temp.get(0).getEventID());
+		
+	}
+	@Test
+	void activeEvents_badCase() throws StudyUpException {
+		int year = 90, month = 2, day = 5, eventId = 1;
+		
+		Date date = new Date(year, month, day);
+		//gets the event from active events and assigns it to a temp list
+		List<Event> temp = eventServiceImpl.getActiveEvents();
+				//throws an assert if event Id is equal to eventId previously declared
+		
+		assertEquals(1, temp.size());
+
+		
+	}
+	@Test
+	void getPastEvents_goodCase() {
+		int eventID = 1;
+		Date date = new Date(20, 3, 13);
+		//set new date on the event ID
+		DataStorage.eventData.get(eventID).setDate(date);
+		//gets the event from active events and assigns it to a temp list
+		List<Event> temp = eventServiceImpl.getPastEvents();
+		//checks if new created temp article (0) and Something in the DataStorage
+		assertEquals(DataStorage.eventData.get(eventID), temp.get(0));
+		
+	}
+	@Test
+	void getPastEvents_badCase() {
+		int eventId = 1;
+		Date date = new Date(50, 3, 10);
+		//set new date on the event ID
+		DataStorage.eventData.get(eventId).setDate(date);
+		//gets the event from active events and assigns it to a temp list
+		List<Event> temp = eventServiceImpl.getPastEvents();
+				//throws an assert if event Id is equal to eventId previously declared
+		//if size is 0 then send an alert
+		
+		assertEquals(0, temp.size());
+//		Assertions.assertThrows(StudyUpException.class, () -> {
+//			eventServiceImpl.getPastEvents().contains(o);
+//		  });
+		
+	}
+	@Test
+	void delete_goodCase() {
+		int eventID = 1;
+		
+		//If datastorage eventId, exists in in eventServiceImple
+		assertEquals(DataStorage.eventData.get(eventID), eventServiceImpl.deleteEvent(eventID));
+		
+	}
+	@Test
+	void delete_badCase() {
+		int eventID = 1;
+		
+		// exists in in eventServiceImple if it is null
+		assertEquals(null, eventServiceImpl.deleteEvent(eventID));
+			
+	}
 }

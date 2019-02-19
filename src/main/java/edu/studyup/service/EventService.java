@@ -17,7 +17,7 @@ public interface EventService {
 	/**
 	 * Updates the event name by taking in an eventID and the new name.
 	 * throws error if any failed constraints.
-	 * @param eventID The ID of the specific {@link Event} to be updated.
+	 * @param eventID The ID of the specific {@link Event} to be upda++ted.
 	 * @param name    The String value to update.
 	 * @return        The updated {@code event}
 	 * @throws        StudyUpException 
