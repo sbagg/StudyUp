@@ -130,15 +130,17 @@ class EventServiceImplTest {
 	}
 	@Test
 	void activeEvents_badCase() throws StudyUpException {
-		int year = 90, month = 2, day = 5, eventId = 1;
-		
-		Date date = new Date(year, month, day);
-		//gets the event from active events and assigns it to a temp list
-		List<Event> temp = eventServiceImpl.getActiveEvents();
-				//throws an assert if event Id is equal to eventId previously declared
-		
-		assertEquals(1, temp.size());
-
+		{
+			int year = 95;
+			int month = 1;
+			int day = 3;
+			int eventID = 1;
+			Date date1 = new Date(year, month, day);
+			DataStorage.eventData.get(eventID).setDate(date1);
+			
+			List<Event> temp = eventServiceImpl.getActiveEvents();
+			assertEquals(0, temp.size());
+		}
 		
 	}
 	@Test

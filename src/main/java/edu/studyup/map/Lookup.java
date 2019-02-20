@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import edu.studyup.entity.Location;
+import java.nio.charset.StandardCharsets;
 
 public class Lookup {
 	public static Location lookupPlace(String query) {
@@ -43,7 +44,8 @@ public class Lookup {
 			String urlString = "https://nominatim.openstreetmap.org/search?q=" + URLEncoder.encode(query, "UTF-8")
 					+ "&format=json";
 			URL url = new URL(urlString);
-			try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()))) {
+			
+			try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8.name()))) {
 				StringBuilder sb = new StringBuilder();
 				int cp;
 				while ((cp = in.read()) != -1) {
